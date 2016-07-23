@@ -14,7 +14,7 @@ shapiro.test(DAPI.Count)# p < .05, Total cell counts normally distributed
 #R.T. Vs. Total Cell Count
 logRT= log(Residence.Time..hrs.)#Graph region cannot appropriately capture the wide gradient of R.T. values. Transformation makes this clearer.
 logcount=log(DAPI.Count)
-plot(logRT, DAPI.Count, xlab= "Log Residence Time (hours)", ylab= "Total Number of Cells Per Transect", main = "Population Sizes decrease with Residence Time",  cex= .8, col= "blue")
+plot(Residence.Time..hrs., DAPI.Count, xlab= "Residence Time (hours)", ylab= "Total Number of Cells Per Transect", main = "Population Sizes decrease with Residence Time",  cex= .8, col= "blue")
 text(x= ('3.00'), y=200, labels='r= -.8408713')
 text(x= ('3.00'), y=155, labels ="y= -.3643x + 118.6097")
 abline(lm(DAPI.Count ~ logRT))
@@ -34,11 +34,12 @@ summary(lm(DAPI.Count ~ Residence.Time..hrs.))
 
 #R.T Vs. % Activity
 shapiro.test(X..Active)# p < .05, data is parametric, use pearson's product moment to test correlation
-plot(logRT, X..Active, xlab= "Log Residence Time (hours)", ylab= "% of Active Cells Per Transect", main = "% Active Cells across Residence Time Gradient",  cex= .8, col= "red")
+plot(logRT, X..Active, xlab= "Log Residence Time (hours)", ylab= "% of Active Cells Per Transect", main = "% Activity Declines with Residence Time",  cex= .8, col= "red")
 abline(lm(X..Active ~ logRT))
-text(x= ('3.00'), y=80, labels='r= -.4231026')
-text(x= ('3.00'), y=70, labels ="y= -3.284x + 54.475")
-cor.test(X..Active, logRT., method= "pearson")
+text(x= ('4.00'), y= 80, paste("r-squared = ", round(summary(regactive)$r.squared, 3)))
+text(x= ('4.00'), y=70, labels ="p = .002")
+text(x= ('4.00'), y=58, labels = "y = -3.284x + 54.475 ")
+cor.test(X..Active, logRT, method= "pearson")
 #p < .05, suggesting that there is a correlation between % active cells and Residence Time.
 # r = - .4231026, suggesting a fairly weak but nonetheless present negative correlation.
 #This supports the initial hypothesis in regards to the presence of correlation and the directionality
@@ -54,8 +55,9 @@ shapiro.test(X..Dead)# p < .05, data is parametric, use pearson's product moment
 plot(logRT, X..Dead, xlab= "Log Residence Time(hours)", ylab= "% of Dead Cells Per Transect", main= "Mortality Across Residence Time Gradient", cex = .8, col= "green")
 warnings()
 abline(lm(X..Dead ~ logRT))
-text(x= ('3.00'), y=40, labels='r= -.3165323')
-text(x= ('3.00'), y=30, labels ="y= -2.1611x + 57.7660")
+text(x= ('4.00'), y= 80, paste("r-squared = ", round(summary(regdead)$r.squared, 3)))
+text(x= ('4.00'), y=70, labels ="p = .025")
+text(x= ('4.00'), y=40, labels = "y= -2.1611x + 57.7660 ")
 cor.test(X..Dead, logRT, method= "pearson")
 # p < .05, suggesting that there is a correlation between mortality and residence time. 
 #r = -.3165323, suggesting a weak negative correlation similar to that of the relationship
@@ -71,8 +73,9 @@ plot(logRT, residdead, xlab= "Residence Time", ylab= "Residual", main = "Resid. 
 shapiro.test(X..Dormant)# p < .05, data is parametric.
 plot(logRT, X..Dormant, xlab= "Log Residence Time(hours)", ylab= "% of Inactive Cells per Transect", main= "Dormancy Levels Across Residence Time Gradient", cex = .8)
 abline(lm(X..Dormant ~ logRT))
-text(x= ('3.00'), y=80, labels='r= .4231026')
-text(x= ('3.00'), y=70, labels ="y= 3.284x + 45.525")
+text(x= ('4.00'), y= 80, paste("r-squared = ", round(summary(regdorm)$r.squared, 3)))
+text(x= ('4.00'), y=70, labels ="p = .002")
+text(x= ('4.00'), y=40, labels = "y= 3.284x + 45.525")
 cor.test(X..Dormant, logRT, method= "pearson")
 #p < .05, suggesting that a correlation exists between Dormancy Levels and Residence Time.
 #r = .4231026, suggesting a weak positive correlation between the two variables
@@ -122,9 +125,12 @@ curve((-21.57748*log(x)+126.95155), add=TRUE, col = 2)
 plot(logRT, logcount, xlab= "Log Residence Time (hours)", ylab= "Log Total Number of Cells Per Transect", main = "Population Sizes decrease with Residence Time",  cex= .8, col= "blue")
 abline(lm(logcount ~ logRT))
 reglogtotalnum= lm(formula= logcount ~ logRT)
-summary(reglogtotalnum)#y= -.47242x + 4.59627
-text(x= ('4.00'), y= 5, labels='r= -.922685')
-text(x= ('4.00'), y=4, labels ="y= -.47242x + 4.59627")
+summary(reglogtotalnum)$r.squared #y= -.47242x + 4.59627
+text(x= ('4.00'), y= 5, paste("r-squared = ", round(summary(reglogtotalnum)$r.squared, 3)))
+text(x= ('4.00'), y= 4, labels= "p= 2.2e-16")
+text(x= ('2.00'), y= 1.5, labels ="y= -.47242x + 4.59627")
+#The paste function denotes the text to be some variable from some operation.
+#In this case, it is the r^2 value.
 cor.test(logcount, logRT, method= "pearson")# p < .05, r -.922685
 plot(logRT, residlogtotalnum, xlab= "Residence Time", ylab= "Residual", main = "Resid. Plot.", abline(0,0))
 residlogtotalnum= resid(reglogtotalnum)
