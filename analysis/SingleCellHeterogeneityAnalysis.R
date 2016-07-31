@@ -13,9 +13,25 @@ shapiro.test(logRT)# p < .05, data is parametric
 
 #R.T. Vs. Total Cell Count. Logarithmic Transformation 
 logcount=log(DAPI.Count)
+logcell=log(Cell_ml)
+shapiro.test(logcell)# p < .05 Data is parametric.
 shapiro.test(logcount)#p > .05. Data is nonparametric. 
 #The data was transformed to linearize the graph.
 #As opposed to transformation, Use Kendall's to test correlation.
+
+plot(logRT, logcell, xlab= "Ln Residence Time (hours)", ylab= "Ln Total Number of Cells (cells/mL)", main = "Population Sizes decrease with Residence Time",  cex= .8, col= "blue")
+abline(lm(logcell ~ logRT))
+reglogtotalnum= lm(formula= logcount ~ logRT)
+summary(reglogtotalnum)#y = - .3629x + 3.904
+summary(reglogtotalnum)$r.squared
+text(x= ('4.00'), y= 9, paste("r-squared = ", round(summary(reglogtotalnum)$r.squared, 3)))
+text(x= ('4.00'), y= 8, labels ="y= -.3629x + 3.904")
+cor.test(logcell, logRT, method= "pearson")# p < .05, r=  -.8345473
+
+
+
+
+
 plot(logRT, logcount, xlab= "Ln Residence Time (hours)", ylab= "Ln Total Number of Cells Per Transect", main = "Population Sizes decrease with Residence Time",  cex= .8, col= "blue")
 abline(lm(logcount ~ logRT))
 reglogtotalnum= lm(formula= logcount ~ logRT)
@@ -40,7 +56,7 @@ plot(logRT, residlogtotalnum, xlab= "Residence Time", ylab= "Residual", main = "
 
 #R.T Vs. % Activity
 shapiro.test(X..Active)# p < .05, data is parametric, use pearson's product moment to test correlation
-plot(logRT, X..Active, xlab= "Log Residence Time (hours)", ylab= "% of Active Cells Per Transect", main = "% Activity Declines with Residence Time",  cex= .8, col= "red")
+plot(logRT, X..Active, xlab= "Ln Residence Time (hours)", ylab= "% of Active Cells Per Transect", main = "% Activity Declines with Residence Time",  cex= .8, col= "red")
 abline(lm(X..Active ~ logRT))
 regactive = lm(formula = (X..Active ~ logRT))
 summary(regactive)#y = -3.15x + 54.3021
@@ -60,7 +76,7 @@ plot(logRT, residactive, xlab= "Residence Time", ylab= "Residual", main = "Resid
 
 #R.T. vs. Mortality
 shapiro.test(X..Dead)# p > .05, data is non-parametric, use kendall's.
-plot(logRT, X..Dead, xlab= "Log Residence Time(hours)", ylab= "% of Dead Cells Per Transect", main= "Mortality Is Not Correlated With Residence Time", cex = .8, col= "green")
+plot(logRT, X..Dead, xlab= "Ln Residence Time(hours)", ylab= "% of Dead Cells Per Transect", main= "Mortality Is Not Correlated With Residence Time", cex = .8, col= "green")
 warnings()
 abline(lm(X..Dead ~ logRT))
 regdead= lm(formula= (X..Dead ~ logRT))
@@ -81,7 +97,7 @@ plot(logRT, residdead, xlab= "Residence Time", ylab= "Residual", main = "Resid. 
 
 #R.T. vs. Dormancy
 shapiro.test(X..Dormant)# p < .05, data is parametric.
-plot(logRT, X..Dormant, xlab= "Log Residence Time(hours)", ylab= "% of Inactive Cells per Transect", main= "Dormancy Levels Across Residence Time Gradient", cex = .8)
+plot(logRT, X..Dormant, xlab= "Ln Residence Time(hours)", ylab= "% of Inactive Cells per Transect", main= "Dormancy increases with Residence Time ", cex = .8)
 regdorm= lm(formula= (X..Dormant ~ logRT))
 summary(regdorm)#y= 3.15x + 45.6979
 abline(lm(X..Dormant ~ logRT))

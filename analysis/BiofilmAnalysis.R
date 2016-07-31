@@ -11,7 +11,7 @@ shapiro.test(RawAbsorb)#p > .05, data nonparametric. Use Spearman's or transform
 logrt= log(Restime)#Graph region cannot appropriately capture the wide gradient of R.T. values. Transformation makes this clearer.
 logabsorb=log(RawAbsorb)
 shapiro.test(logabsorb)
-plot(logrt, ModAbsorb, xlab= "Log Residence Time (hours)", ylab= "Absorbance Readings", main = "Biofilm Production Is Not Correlated with Res. Time",  cex= .8)
+plot(logrt, ModAbsorb, xlab= "Ln Residence Time (hours)", ylab= "Absorbance Readings", main = "Biofilm Production Is Not Correlated with Res. Time",  cex= .8)
 text(x= ('3.00'), y=.30, labels='p > .05')
 (text(x=('3.00'), y= .25, labels= 'r= -.032133'))
 abline(lm(ModAbsorb ~ logrt))
@@ -23,7 +23,7 @@ summary(regfilm)
 shapiro.test(ModAbsorb)# p > .05, data nonparametric
 plot(logrt, ModAbsorb)
 abline(lm(ModAbsorb ~ logrt))
-cor.test(ModAbsorb, logrt, method="spearman")
+cor.test(ModAbsorb, logrt, method="pearson")
 regfilm= lm(formula= ModAbsorb ~ logrt)
 summary(regfilm)
 
@@ -36,7 +36,7 @@ shapiro.test(sqrtabsorb)
 sqrtrestime= sqrt(Restime)
 shapiro.test(sqrtrestime)
 
-allelofilm= aov(sqrtabsorb ~ Chemostat, data= film)
+allelofilm= aov(ModAbsorb ~ Restime, data= film)
 summary(allelofilm)
 TukeyHSD(allelofilm)
-boxplot(ModAbsorb ~ Chemostat, data= film, main= "Biofilm Production Comparison" , xlab= "Chemostat # ", ylab= " Absorbance Readings", cex.lab= .7)
+boxplot(ModAbsorb ~ Chemostat, data= film, main= "Biofilm Production Comparison" , xlab= "Community Label", ylab= " Absorbance Readings", cex.lab= .7)
