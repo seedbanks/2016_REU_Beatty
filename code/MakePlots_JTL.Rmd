@@ -96,5 +96,59 @@ quad.mod <-lm(total ~ tau + tau.2)
 tauvalues <- seq(0, 2.5, 0.2)
 pred.tot <- predict(quad.mod,list(tau=tauvalues, tau.2=tauvalues^2))
 lines(tauvalues, pred.tot, col = "darkgreen", lwd = 3)
+```
 
 
+# Plot #3
+```{r}
+# Number of Dormant or Active Cells
+tau <- log10(data$Residence.Time..hrs.)
+act <- logcell * (X..Active/100)
+dorm <- logcell * (1 -(X..Active/100))
+
+png("figures/Active_abund_RT.png", height = 1200, width = 1200, res = 192)
+plot(logRT, act, 
+     xlab = "", ylab = "", 
+     xaxt = "n", yaxt = "n",
+     cex = 1.2, pch = 16, ylim = c(0,9), xlim = log10(c(.1, 1000)))
+axis(side = 1, 
+     labels = c(.1, 1, 10, 100, 1000),
+     at = log10(c(.1, 1, 10, 100, 1000)), cex.lab = 1.5, lwd.ticks = 2)
+axis(side = 2,
+     las = 1, cex.lab = 1.5, lwd.ticks = 2)
+axis(side = 3, at = log10(c(.1, 1, 10, 100, 1000)), labels = F, lwd.ticks = 2)
+axis(side = 4, labels = F, lwd.ticks = 2)
+box(lwd = 2)
+abline(lm(act ~ logRT), lwd = 2)
+mtext("Residence Time (Hours)", line = 3, side = 1, cex = 1.5)
+mtext(expression("Active bacteria (cells/mL"), 
+      line = 2.25, side = 2, cex = 1.5)
+dev.off()
+```
+
+# Plot #4
+```{r}
+png("figures/Active-Total_RT.png", height = 1200, width = 1200, res = 192)
+
+# plot total
+plot(logRT, logcell, 
+     xlab = "", ylab = "", 
+     xaxt = "n", yaxt = "n",
+     cex = 1.2, pch = 22, col = "black" xlim = log10(c(0.1, 1000)), ylim = c(0,10))
+axis(side = 1, 
+     labels = c(.1, 1, 10, 100, 1000),
+     at = log10(c(.1, 1, 10, 100, 1000)), cex.lab = 1.5, lwd.ticks = 2)
+axis(side = 2,
+     las = 1, cex.lab = 1.5, lwd.ticks = 2)
+axis(side = 3, at = log10(c(.1, 1, 10, 100, 1000)), labels = F, lwd.ticks = 2)
+axis(side = 4, labels = F, lwd.ticks = 2)
+box(lwd = 2)
+abline(lm(logcell ~ logRT), lwd = 2)
+mtext("Residence Time (Hours)", line = 3, side = 1, cex = 1.5)
+mtext(expression("Density" ~ (log[10] ~ cells ~ ml^{-1}) ), 
+      line = 2.25, side = 2, cex = 1.2)
+
+points(logRT, act, col = "red")
+abline(lm(act ~ logRT), lwd = 2, col = "red")
+dev.off()
+```
