@@ -61,16 +61,16 @@ mtext(expression("Bacterial Density" ~ (log[10] ~ cells ~ ml^{-1}) ),
       line = 2.25, side = 2, cex = 1.2)
 dev.off()
 
-png("../figures/Activity_RT.png", height = 1200, width = 1200, res = 192)
+png("figures/Activity_RT.png", height = 1200, width = 1200, res = 192)
 plot(logRT, X..Active, 
      xlab = "", ylab = "", 
      xaxt = "n", yaxt = "n",
-     cex = 1.2, pch = 16, ylim = c(0,100), xlim = log10(c(.1, 1000)))
+     cex = 2, pch = 22, col = "black", bg = "white", lwd = 2, ylim = c(0,100), xlim = log10(c(.1, 1000)))
 axis(side = 1, 
      labels = c(.1, 1, 10, 100, 1000),
-     at = log10(c(.1, 1, 10, 100, 1000)), cex.lab = 1.5, lwd.ticks = 2)
+     at = log10(c(.1, 1, 10, 100, 1000)), cex.lab = 3, lwd.ticks = 2)
 axis(side = 2,
-     las = 1, cex.lab = 1.5, lwd.ticks = 2)
+     las = 1, cex.lab = 3, lwd.ticks = 2)
 axis(side = 3, at = log10(c(.1, 1, 10, 100, 1000)), labels = F, lwd.ticks = 2)
 axis(side = 4, labels = F, lwd.ticks = 2)
 box(lwd = 2)
